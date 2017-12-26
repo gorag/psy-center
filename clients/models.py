@@ -1,6 +1,6 @@
-from django.db import models
+from django.contrib.auth.models import Group, User
 from django.core.validators import RegexValidator
-from django.contrib.auth.models import Group
+from django.db import models
 
 REGEX_PHONE = RegexValidator(regex='^\+7\d{10}$', message='Incorrect phone number format')
 REGEX_VK_ID = RegexValidator(regex='^id\d{1,}$', message='Invalid vk id')
@@ -24,9 +24,7 @@ class Client(models.Model):
     time_to_call = models.CharField(max_length=50, blank=True)
     gender = models.CharField(max_length=1, choices=GENDER)
     date_of_birth = models.DateField(blank=True, null=True)
-
-    specialists = models.ManyToManyField('auth.User', related_name='clients_reception',
-                                         limit_choices_to={'groups__name': 'Specialists'})
+    specialists = models.ManyToManyField('auth.User', related_name='clients_reception',)
     registrar = models.ForeignKey('auth.User', related_name='clients_registered', on_delete=models.DO_NOTHING)
     created = models.DateTimeField(auto_now_add=True)
     visible = models.BooleanField(default=True)

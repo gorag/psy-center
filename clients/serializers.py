@@ -4,8 +4,15 @@ from rest_framework import serializers
 from clients.models import Client
 
 
+class SpecialistsPKField(serializers.PrimaryKeyRelatedField):
+    def get_queryset(self):
+        queryset = User.objects.filter(groups__name='Specialists')
+        return queryset
+
+
 class ClientSerializer(serializers.ModelSerializer):
     registrar = serializers.ReadOnlyField(source='registrar.username')
+    specialists = SpecialistsPKField(many=True)
 
     class Meta:
         model = Client
@@ -22,5 +29,5 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
-            'url', 'id', 'username', 'clients_registered', 'clients_reception'
+            'url', 'id', 'username', 'groups', 'clients_registered', 'clients_reception'
         )
