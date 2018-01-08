@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib.auth.models import Group, User
 from django.core.validators import RegexValidator
 from django.db import models
@@ -24,7 +26,21 @@ class Client(models.Model):
     time_to_call = models.CharField(max_length=50, blank=True)
     gender = models.CharField(max_length=1, choices=GENDER)
     date_of_birth = models.DateField(blank=True, null=True)
-    specialists = models.ManyToManyField('auth.User', related_name='clients_reception',)
+    specialists = models.ManyToManyField('auth.User', related_name='clients_reception', )
     registrar = models.ForeignKey('auth.User', related_name='clients_registered', on_delete=models.DO_NOTHING)
     created = models.DateTimeField(auto_now_add=True)
     visible = models.BooleanField(default=True)
+
+    @property
+    def age(self):
+        if self.date_of_birth is None:
+            return None
+        else:
+            age_years = datetime.now().year - self.date_of_birth.year
+            age_months = datetime.now().month - self.date_of_birth.month
+            if age_months < 0:
+                return age_years - 1
+            elif age_months == 0:
+                if datetime.now().day - self.date_of_birth.day < 0:
+                    return age_years - 1
+            return age_years

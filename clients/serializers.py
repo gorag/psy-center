@@ -19,7 +19,7 @@ class ClientSerializer(serializers.ModelSerializer):
         fields = (
             'url', 'id', 'last_name', 'first_name', 'middle_name', 'special_client', 'email', 'phone_number_1',
             'phone_number_2', 'phone_number_non_format', 'phone_number_ext', 'vk_id', 'time_to_call',
-            'gender', 'date_of_birth', 'specialists', 'registrar'
+            'gender', 'date_of_birth', 'age', 'specialists', 'registrar'
         )
 
 
